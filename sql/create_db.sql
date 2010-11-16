@@ -1,0 +1,134 @@
+CREATE DATABASE parseexceptiondb;
+USE parseexceptiondb;
+
+-- USER TABLE
+CREATE TABLE users(
+	uid INT NOT NULL AUTO_INCREMENT,
+	username VARCHAR(50) NOT NULL,
+	join_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	is_mod BOOL DEFAULT FALSE NOT NULL,
+	karma INT DEFAULT 0 NOT NULL,
+	oid_identity VARCHAR(255) NOT NULL,
+	oid_server VARCHAR(255) NOT NULL,
+    login_cookie INT,
+	PRIMARY KEY (uid)
+);
+
+-- SETTINGS TABLE
+CREATE TABLE settings(
+	id INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	email VARCHAR(255),
+	website VARCHAR(255),
+	about TEXT,
+    about_raw TEXT,
+	PRIMARY KEY (id),
+	FOREIGN KEY (uid) REFERENCES users(uid),
+	UNIQUE (uid),
+    INDEX(email)
+);
+
+-- FRIENDS TABLE
+CREATE TABLE friends(
+	id INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	friend_id INT NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (uid) REFERENCES users(uid),
+	FOREIGN KEY (friend_id) REFERENCES users(uid),
+	CONSTRAINT uid_chk CHECK (uid <> friend_id)
+);
+
+-- SOLUTIONS TABLE
+CREATE TABLE solutions(
+	sid INT NOT NULL AUTO_INCREMENT,
+	submitter INT NOT NULL,
+	question TEXT NOT NULL,
+	answer TEXT NOT NULL,
+    answer_raw TEXT NOT NULL,
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	score INT DEFAULT 0 NOT NULL,
+	ispublic BOOL DEFAULT TRUE NOT NULL,
+	PRIMARY KEY (sid),
+	FOREIGN KEY (submitter) REFERENCES users(uid),
+    INDEX (timestamp),
+    INDEX (score)
+);
+
+-- TAGS TABLE
+CREATE TABLE tags(
+	id INT NOT NULL AUTO_INCREMENT,
+	sid INT NOT NULL,
+	tag VARCHAR(64) NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (sid) REFERENCES solutions(sid),
+    INDEX (tag)
+);
+
+-- VOTES TABLE
+CREATE TABLE votes(
+	id INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	sid INT NOT NULL,
+	upvote ENUM('1', '2', '3') NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (uid) REFERENCES users(uid),
+	FOREIGN KEY (sid) REFERENCES solutions(sid),
+    INDEX (upvote)
+);
+
+-- MESSAGES TABLE
+CREATE TABLE messages(
+	id INT NOT NULL AUTO_INCREMENT,
+	from_id INT NOT NULL,
+	to_id INT NOT NULL,
+	subject VARCHAR(255),
+	body TEXT,
+  	unread BOOL DEFAULT TRUE NOT NULL,
+	deleted BOOL DEFAULT FALSE NOT NULL,
+	threadid INT,
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (from_id) REFERENCES users(uid),
+	FOREIGN KEY (to_id) REFERENCES users(uid),
+    INDEX (timestamp),
+    INDEX (deleted)
+);
+
+-- COMMENTS TABLE
+CREATE TABLE comments(
+	id INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	sid INT NOT NULL,
+	body TEXT NOT NULL,
+    body_raw TEXT NOT NULL,
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	path VARCHAR(512),
+	editted BOOL DEFAULT FALSE NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (uid) REFERENCES users(uid),
+	FOREIGN KEY (sid) REFERENCES solutions(sid),
+    INDEX (path)
+);
+
+-- IP LOG
+CREATE TABLE iplog(
+    id INT NOT NULL AUTO_INCREMENT,
+    uid INT NOT NULL,
+    ip VARCHAR(40) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (uid) REFERENCES users(uid)
+);
+
+-- SAVED SOLUTIONS
+CREATE TABLE saved(
+	id INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	sid INT NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (uid) REFERENCES users(uid),
+	FOREIGN KEY (sid) REFERENCES solutions(sid)
+);
+
+

@@ -1,0 +1,15 @@
+                             ParseException
+          
+Introduction:
+    ParseException is a website designed to allow programmers to share their
+knowledge. They can post up workarounds or solutions to difficult problems they
+have encountered for the benefit of others. It can also be used to keep notes
+or examples of how to execute certain commands or how to do something with a
+particular API. 
+
+Code:
+    This is programmed using JSPs and the Apache Struts 1.3.10 framework. It is
+necessary to run this within a sever capable of running Java servlets such as
+Apache Tomcat. Furthermore a MySQL database is must be setup and the connection
+information can be placed in the file application.properties in the root
+directory of this project. 

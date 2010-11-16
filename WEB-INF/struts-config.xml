@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+
+	<!-- Form Bean Definitions -->
+	<form-beans>
+		<form-bean name="contactForm" type="com.parseexception.formbeans.ContactForm" />
+		<form-bean name="commentForm" type="com.parseexception.formbeans.CommentForm" />
+		<form-bean name="loginForm" type="com.parseexception.formbeans.LoginForm" />
+		<form-bean name="messageForm" type="com.parseexception.formbeans.MessageForm" />
+		<form-bean name="searchForm" type="com.parseexception.formbeans.SearchForm" />
+		<form-bean name="solutionForm" type="com.parseexception.formbeans.SolutionForm" />
+		<form-bean name="settingsForm" type="com.parseexception.formbeans.SettingsForm" />
+		<form-bean name="messageBoxForm"
+			type="com.parseexception.formbeans.MessageBoxForm" />
+	</form-beans>
+
+	<!-- Global Exception Definitions -->
+	<global-exceptions>
+		<!--
+			sample exception handler <exception key="expired.password"
+			type="app.ExpiredPasswordException" path="/changePassword.jsp"/> end
+			sample
+		-->
+	</global-exceptions>
+
+	<!-- Global Forward Definitions -->
+	<global-forwards>
+		<forward name="login" path="/pages/login.jsp" />
+	</global-forwards>
+
+	<!-- Action Mapping Definitions -->
+	<action-mappings>
+		<!-- Login -->
+		<action path="/login" type="com.parseexception.actionbeans.LoginAction"
+			name="loginForm" scope="request" validate="false" unknown="false">
+			<forward name="success" path="/viewhome.do" />
+			<forward name="failure" path="/pages/login.jsp" />
+		</action>
+
+		<!-- Verify Login -->
+		<action path="/auth" type="com.parseexception.actionbeans.VerifyLoginAction"
+			unknown="false">
+			<forward name="success" path="/viewhome.do" />
+			<forward name="failure" path="/pages/login.jsp" />
+		</action>
+
+		<!-- Logout -->
+		<action path="/logout" type="com.parseexception.actionbeans.LogoutAction"
+			unknown="false">
+			<forward name="success" path="/viewhome.do" />
+		</action>
+
+		<!-- Submit Vote -->
+		<action path="/ajax_submitvote" type="com.parseexception.actionbeans.SubmitVoteAction"
+			unknown="false">
+			<forward name="success" path="/pages/ajaxpages/Vote.jsp" />
+		</action>
+		
+		<!-- Save Solution -->
+		<action path="/ajax_save" type="com.parseexception.actionbeans.SaveSolutionAction"
+			unknown="false">
+			<forward name="success" path="/pages/ajaxpages/Save.jsp" />	
+		</action>
+
+		<!-- Edit Comment -->
+		<action path="/editcomment" type="com.parseexception.actionbeans.EditCommentAction"
+			name="commentForm" scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/editcomment.jsp" />
+			<forward name="failure" path="viewsolution.do" />
+		</action>
+
+		<!-- Post Comment -->
+		<action path="/ajax_postcomment" type="com.parseexception.actionbeans.PostCommentAction"
+			name="commentForm" scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/ajaxpages/Comment.jsp" />
+			<forward name="failure" path="/pages/ajaxpages/AJAXFailure.html" />
+		</action>
+
+		<!-- Edit solution -->
+		<action path="/editsolution"
+			type="com.parseexception.actionbeans.EditSolutionAction" name="solutionForm"
+			scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/editsolution.jsp" />
+			<forward name="failure" path="/viewhome.do" />
+		</action>
+
+		<!-- Post solution -->
+		<action path="/postsolution"
+			type="com.parseexception.actionbeans.PostSolutionAction" name="solutionForm"
+			scope="request" validate="false" unknown="false">
+			<forward name="success" path="/viewsolution.do" />
+			<forward name="failure" path="/pages/editsolution.jsp" />
+		</action>
+
+		<!-- Send Message -->
+		<action path="/sendmessage" type="com.parseexception.actionbeans.SendMessageAction"
+			name="messageForm" scope="request" validate="false" unknown="false">
+			<forward name="success" path="/viewoutbox.do" />
+			<forward name="failure" path="/pages/sendmessage.jsp" />
+		</action>
+
+		<!-- Compose Message -->
+		<action path="/compose"
+			type="com.parseexception.actionbeans.ComposeMessageAction" name="messageForm"
+			scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/sendmessage.jsp" />
+		</action>
+
+		<!-- Delete Message -->
+		<action path="/deletemsg"
+			type="com.parseexception.actionbeans.DeleteMessageAction" unknown="false">
+			<forward name="sucess" path="/viewinbox.do" />
+		</action>
+
+		<!-- Add Friend -->
+		<action path="/addfriend" type="com.parseexception.actionbeans.AddFriendAction"
+			unknown="false">
+			<forward name="success" path="/pages/viewuser.jsp" />
+			<forward name="failure" path="/viewhome.do" />
+		</action>
+
+		<!-- Remove Friend -->
+		<action path="/removefriend"
+			type="com.parseexception.actionbeans.RemoveFriendAction" unknown="false">
+			<forward name="success" path="/viewmyfriends.do" />
+		</action>
+
+		<!-- View User -->
+		<action path="/viewuser" type="com.parseexception.actionbeans.ViewUserAction"
+			unknown="false">
+			<forward name="success" path="/pages/viewuser.jsp" />
+		</action>
+
+		<!-- View User Comments -->
+		<action path="/viewusercomments" type="com.parseexception.actionbeans.ViewUserComments"
+			unknown="false">
+			<forward name="success" path="/pages/viewusercomments.jsp" />
+		</action>
+
+		<!-- View Solutions Liked By User -->
+		<action path="/likedbyuser"
+			type="com.parseexception.actionbeans.ViewSolutionsLikedByUserAction"
+			unknown="false">
+			<forward name="success" path="/pages/likedbyuser.jsp" />
+		</action>
+
+		<!-- View Solutions Submitted By User -->
+		<action path="/submittedbyuser"
+			type="com.parseexception.actionbeans.ViewSolutionsSubmittedByUserAction"
+			unknown="false">
+			<forward name="success" path="/pages/submittedbyuser.jsp" />
+		</action>
+		
+		<!-- View Solutions Saved By User -->
+		<action path="/savedsolutions"
+			type="com.parseexception.actionbeans.ViewSavedSolutionsAction"
+			unknown="false">
+			<forward name="success" path="/pages/savedsolutions.jsp" />
+		</action>
+
+		<!-- View solution -->
+		<action path="/viewsolution"
+			type="com.parseexception.actionbeans.ViewSolutionAction" unknown="false">
+			<forward name="success" path="/pages/viewsolution.jsp" />
+			<forward name="failure" path="/viewhome.do" />
+		</action>
+
+		<!-- Process Messages -->
+		<action path="/processmessages"
+			type="com.parseexception.actionbeans.ProcessMessagesAction" name="messageBoxForm"
+			validate="false" scope="request" unknown="false">
+			<forward name="success" path="/viewinbox.do" />
+		</action>
+
+		<!-- View Inbox -->
+		<action path="/viewinbox" type="com.parseexception.actionbeans.ViewInboxAction"
+			unknown="false">
+			<forward name="success" path="/pages/viewinbox.jsp" />
+		</action>
+
+		<!-- View Outbox -->
+		<action path="/viewoutbox" type="com.parseexception.actionbeans.ViewOutboxAction"
+			unknown="false">
+			<forward name="success" path="/pages/viewoutbox.jsp" />
+		</action>
+
+		<!-- View Message -->
+		<action path="/viewmessage" type="com.parseexception.actionbeans.ViewMessageAction"
+			name="messageForm" scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/viewmessage.jsp" />
+		</action>
+
+		<!-- View Home -->
+		<action path="/viewhome" type="com.parseexception.actionbeans.ViewHomeAction"
+			unknown="false">
+			<forward name="success" path="/pages/index.jsp" />
+		</action>
+
+		<!-- ViewFriendComments -->
+		<action path="/viewfriendscomments"
+			type="com.parseexception.actionbeans.ViewFriendComments" unknown="false">
+			<forward name="success" path="/pages/viewfriendcomments.jsp" />
+		</action>
+
+		<!-- ViewSolutionsLikedByFriends -->
+		<action path="/likedbyfriends"
+			type="com.parseexception.actionbeans.ViewSolutionsLikedByFriendsAction"
+			unknown="false">
+			<forward name="success" path="/pages/likedbyfriends.jsp" />
+		</action>
+
+		<!-- ViewSolutionsSubmittedByFriends -->
+		<action path="/submittedbyfriends"
+			type="com.parseexception.actionbeans.ViewSolutionsSubmittedByFriendsAction"
+			unknown="false">
+			<forward name="success" path="/pages/submittedbyfriends.jsp" />
+		</action>
+
+		<!-- ViewFriends -->
+		<action path="/viewmyfriends" type="com.parseexception.actionbeans.ViewFriendsAction"
+			unknown="false">
+			<forward name="success" path="/pages/viewfriends.jsp" />
+		</action>
+
+		<!-- View Settings -->
+		<action path="/editsettings"
+			type="com.parseexception.actionbeans.ViewSettingsAction" name="settingsForm"
+			scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/editsettings.jsp" />
+			<forward name="failure" path="/pages/editsettings.jsp" />
+		</action>
+
+		<!-- Save Settings -->
+		<action path="/savesettings"
+			type="com.parseexception.actionbeans.SaveSettingsAction" name="settingsForm"
+			scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/editsettings.jsp" />
+			<forward name="failure" path="/pages/editsettings.jsp" />
+		</action>
+
+		<!-- Search -->
+		<action path="/search" type="com.parseexception.actionbeans.SearchAction"
+			name="searchForm" scope="request" validate="false" unknown="false">
+			<forward name="success" path="/pages/search.jsp" />
+		</action>
+
+		<!-- Send Contact -->
+		<action path="/sendcontact" type="com.parseexception.actionbeans.SendContactAction"
+			name="contactForm" scope="request" validate="false" unknown="false">
+			<forward name="success" path="/viewhome.do" />
+			<forward name="failure" path="/pages/footer/contact.jsp" />
+		</action>
+
+		<!-- View Comment -->
+		<action path="/viewcomment" type="com.parseexception.actionbeans.ViewCommentAction"
+			unknown="false">
+			<forward name="success" path="/pages/viewcomment.jsp" />
+			<forward name="failure" path="/pages/viewcomment.jsp" />
+		</action>
+	</action-mappings>
+
+	<!-- Message Resources Definitions -->
+	<message-resources parameter="com.parseexception.MessageResources" />
+
+</struts-config>
+
